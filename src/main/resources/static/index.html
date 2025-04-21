@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Rock Paper Scissors App!</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <body>
+            Which one will it be?<br/><br/>
+            <a href="#" onclick="playRashambo('rock')">Rock</a> &nbsp; &nbsp;
+            <a href="#" onclick="playRashambo('paper')">Paper</a> &nbsp; &nbsp;
+            <a href="#" onclick="playRashambo('scissors')">Scissors</a> &nbsp; &nbsp;
+
+            <hr/><br/>
+            <i><div id="result"></div></i>
+            <br/>
+            <span id="wins"></span><span id="losses"></span><span id="ties"></span>
+        </body>
+        <script>
+            playRashambo = async function(playerMove) {
+                url = "http://localhost:8080/score/";
+                result = "";
+                if (playerMove == "rock") {
+                    url += "ties";
+                    result = "ties";
+                } else if (playerMove == "paper") {
+                    url += "wins";
+                    result = "wins";
+                } else if (playerMove == "scissors") {
+                    url += "losses";
+                    result = "losses";
+                }
+
+                try {
+                    const response = await fetch(url, {method: "POST"});
+                    const data = await response.json();
+                    document.getElementById("result").innerHTML = "You played " + playerMove + ". You " + result + "!";
+                    document.getElementById("wins").innerHTML = "Wins: " + data.wins;
+                    document.getElementById("losses").innerHTML = " Losses: " + data.losses;
+                    document.getElementById("ties").innerHTML = " Ties: " + data.ties;
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+
+            }
+        </script>
+</html>
